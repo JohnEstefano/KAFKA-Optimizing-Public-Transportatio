@@ -61,10 +61,11 @@ class Producer:
         )
         
         topic_metadata = client.list_topics(timeout=5)
-        if self.topic_name in set(
-                t.topic for t in iter(topic_metadata.topics.values())
-        ):
-            logger.info("not recreating existing topic %s", self.topic_name)
+        
+        exist_topics = set(t.topic for t in iter(topic_metadata.topics.values()))
+        
+        if self.topic_name in exist_topics:
+            logger.info("topic %s alreadly exists", self.topic_name)
             return
         
         logger.info(
