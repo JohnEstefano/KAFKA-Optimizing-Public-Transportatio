@@ -27,13 +27,7 @@ class Station(Producer):
             .replace("'", "")
         )
 
-        #
-        #
-        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
-        # replicas
-        #
-        #
-        topic_name = "org.chicago.cta.station.arrivals.v1" # TODO: Come up with a better topic name
+        topic_name = "org.chicago.cta.station.arrivals.v1" 
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
@@ -53,11 +47,6 @@ class Station(Producer):
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
-        #
-        #
-        # TODO: Complete this function by producing an arrival message to Kafka
-        #
-        #
         self.producer.produce(
            topic=self.topic_name,
            key={"timestamp": self.time_millis()},
