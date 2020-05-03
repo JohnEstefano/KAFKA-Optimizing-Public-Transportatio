@@ -30,19 +30,12 @@ class KafkaConsumer:
         self.consume_timeout = consume_timeout
         self.offset_earliest = offset_earliest
 
-        #
-        #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
-        #
-        #
         self.broker_properties = {
             'bootstrap.servers': 'localhost:9092',
             "group.id": f"{topic_name_pattern}",
             "default.topic.config": {"auto.offset.reset": "earliest"},
         }
 
-        # TODO: Create the Consumer, using the appropriate type.
         if is_avro is True:
             self.broker_properties["schema.registry.url"] = "http://schema-registry:8081"
             self.consumer = AvroConsumer(
@@ -53,18 +46,10 @@ class KafkaConsumer:
                             self.broker_properties
                         )
 
-        #
-        #
-        # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
-        # how the `on_assign` callback should be invoked.
-        #
-        #
         self.consumer.subscribe( [self.topic_name_pattern] ,on_assign=self.on_assign )
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
-        # TODO: If the topic is configured to use `offset_earliest` set the partition offset to
-        # the beginning or earliest
         for partition in partitions:
             if self.offset_earliest is True:
                 partition.offset = confluent_kafka.OFFSET_BEGINNING
@@ -82,36 +67,19 @@ class KafkaConsumer:
 
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
-        #
-        #
-        # TODO: Poll Kafka for messages. Make sure to handle any errors or exceptions.
-        # Additionally, make sure you return 1 when a message is processed, and 0 when no message
-        # is retrieved.
-        #
-        #
+        message = self.consumer.poll(timeout=self.consume_timeout)
+       
         try:
-            msg = self.consumer.poll(10)
-            if msg:
-                if not msg.error():
-                    self.message_handler(msg)
-                    return 1
-                elif msg.error().code() != KafkaError._PARTITION_EOF:
-                    logger.error(msg.error())
-                    return 0
-            else:
-                logger.debug("no messages")
+            if message is None:
                 return 0
-        except SerializerError as e:
-            logger.error("Message deserialization failed for %s: %s" % (msg, e))
-            return 0
+            elif message.error() is not None:
+                return 0
+            
+            self.message_handler(message)
+            return 1
 
 
     def close(self):
         """Cleans up any open kafka consumers"""
-        #
-        #
-        # TODO: Cleanup the kafka consumer
-        #
-        #
-        logger.info("closing consumer")
+        logger.info("shutting down consumer")
         self.consumer.close()        
