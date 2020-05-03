@@ -26,15 +26,9 @@ class Turnstile(Producer):
             .replace("-", "_")
             .replace("'", "")
         )
-
-        #
-        #
-        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
-        # replicas
-        #
-        #
+        
         super().__init__(
-            "org.chicago.cta.station.turnstile.v1", # TODO: Come up with a better topic name
+            "org.chicago.cta.station.turnstile.v1",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
             num_partitions=3,
@@ -66,9 +60,4 @@ class Turnstile(Producer):
            logger.info("Turnstile failed to write to topic {} with exception {}.".format(self.topic_name, e))
            logger.info("schema: {}".format(Turnstile.value_schema))
            logger.info("value: {}, {}, {}.".format(self.station.station_id, self.station.name, self.station.color.name))        
-        #
-        #
-        # TODO: Complete this function by emitting a message to the turnstile topic for the number
-        # of entries that were calculated
-        #
-        #
+
