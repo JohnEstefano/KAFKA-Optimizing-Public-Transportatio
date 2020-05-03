@@ -19,19 +19,7 @@ def configure_connector():
     if resp.status_code == 200:
         logging.debug("connector already created skipping recreation")
         return
-
-    # TODO: Complete the Kafka Connect Config below.
-    # Directions: Use the JDBC Source Connector to connect to Postgres. Load the `stations` table
-    # using incrementing mode, with `stop_id` as the incrementing column name.
-    # Make sure to think about what an appropriate topic prefix would be, and how frequently Kafka
-    # Connect should run this connector (hint: not very often!)
-        return
-
-    # TODO: Complete the Kafka Connect Config below.
-    # Directions: Use the JDBC Source Connector to connect to Postgres. Load the `stations` table
-    # using incrementing mode, with `stop_id` as the incrementing column name.
-    # Make sure to think about what an appropriate topic prefix would be, and how frequently Kafka
-    # Connect should run this connector (hint: not very often!)
+    
     logger.info("connector code not completed skipping connector creation")
     resp = requests.post(
        KAFKA_CONNECT_URL,
@@ -52,14 +40,14 @@ def configure_connector():
                "mode": "incrementing",
                "incrementing.column.name": "stop_id",
                "topic.prefix": "stations.",
-               "poll.interval.ms": "60000",
+               "poll.interval.ms": "80000",
            }
        }),
     )
 
     ## Ensure a healthy response was given
     resp.raise_for_status()
-    logging.debug("connector created successfully")
+    logging.debug("connector successfully created")
 
 
 if __name__ == "__main__":
