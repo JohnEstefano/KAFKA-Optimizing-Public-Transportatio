@@ -33,8 +33,7 @@ class Producer:
 
         #
         #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
+        # Configure the broker properties below.
         #
         #
         self.broker_properties = {
@@ -47,7 +46,7 @@ class Producer:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
 
-        # TODO: Configure the AvroProducer
+        # Configure the AvroProducer
         self.producer = AvroProducer(
             self.broker_properties,
             default_key_schema=self.key_schema,
@@ -56,33 +55,31 @@ class Producer:
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
-        #
-        #
-        # TODO: Write code that creates the topic for this producer if it does not already exist on
-        # the Kafka Broker.
-        client = AdminClient({
-            "bootstrap.servers": self.broker_properties["bootstrap.servers"]}
+        logger.info("beginning topic creation for %s", self.topic_name)
+        client = AdminClient(
+            {"bootstrap.servers": self.broker_properties["bootstrap.servers"]}
         )
-
-        topic_metadata = client.list_topics(timeout = 5)
-
-        if self.topic_name in topic_metadata.topics:
-            logger.info(f"topic exisits: {self.topic_name}")
+        topic_metadata = client.list_topics(timeout=5)
+        if self.topic_name in set(
+                t.topic for t in iter(topic_metadata.topics.values())
+        ):
+            logger.info("not recreating existing topic %s", self.topic_name)
             return
-
-        futures = client.create_topics([
-            NewTopic(
-                topic=self.topic_name, 
-                num_partitions=self.num_partitions, 
-                replication_factor=self.num_replicas)
-        ])
-        for topic, future in futures.items():
-            try:
-                future.result()
-                logger.info(f"topic {self.topic_name} created.")
-            except Exception as e:
-                logger.info(f"topic {self.topic_name} creation failed.")
-        
+        logger.info(
+            "creating topic %s with partition %s replicas %s",
+            self.topic_name,
+            self.num_partitions,
+            self.num_replicas,
+        )
+        client.create_topics(
+            [
+                NewTopic(
+                    topic=self.topic_name,
+                    num_partitions=self.num_partitions,
+                    replication_factor=self.num_replicas,
+                )
+            ]
+        )
 
     def time_millis(self):
         return int(round(time.time() * 1000))
