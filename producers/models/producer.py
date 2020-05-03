@@ -59,18 +59,21 @@ class Producer:
         client = AdminClient(
             {"bootstrap.servers": self.broker_properties["bootstrap.servers"]}
         )
+        
         topic_metadata = client.list_topics(timeout=5)
         if self.topic_name in set(
                 t.topic for t in iter(topic_metadata.topics.values())
         ):
             logger.info("not recreating existing topic %s", self.topic_name)
             return
+        
         logger.info(
             "creating topic %s with partition %s replicas %s",
             self.topic_name,
             self.num_partitions,
             self.num_replicas,
         )
+        
         client.create_topics(
             [
                 NewTopic(
