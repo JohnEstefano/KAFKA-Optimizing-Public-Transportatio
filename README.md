@@ -27,7 +27,7 @@ The first step is to configure the train stations to emit some of the events tha
 To accomplish this, the following tasks were completed:
 
 1. Completed code in `producers/models/producer.py`
-1. Definde a `value` schema for the arrival event in `producers/models/schemas/arrival_value.json` with the following attributes
+1. Defined a `value` schema for the arrival event in `producers/models/schemas/arrival_value.json` with the following attributes
 	* `station_id`
 	* `train_id`
 	* `direction`
