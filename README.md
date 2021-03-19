@@ -121,42 +121,38 @@ Documentation helpful in completing this assignment:
 ## Directory Layout
 The project consists of two main directories, `producers` and `consumers`.
 
-The following directory layout indicates the files that the student is responsible for modifying by adding a `*` indicator. Instructions for what is required are present as comments in each file.
-
 ```
-* - Indicates completed code
-
 ├── consumers
-│   ├── consumer.py *
-│   ├── faust_stream.py *
-│   ├── ksql.py *
+│   ├── consumer.py 
+│   ├── faust_stream.py 
+│   ├── ksql.py 
 │   ├── models
 │   │   ├── lines.py
-│   │   ├── line.py *
-│   │   ├── station.py *
-│   │   └── weather.py *
+│   │   ├── line.py 
+│   │   ├── station.py 
+│   │   └── weather.py 
 │   ├── requirements.txt
 │   ├── server.py
 │   ├── topic_check.py
 │   └── templates
 │       └── status.html
 └── producers
-    ├── connector.py *
+    ├── connector.py 
     ├── models
     │   ├── line.py
-    │   ├── producer.py *
+    │   ├── producer.py 
     │   ├── schemas
     │   │   ├── arrival_key.json
-    │   │   ├── arrival_value.json *
+    │   │   ├── arrival_value.json 
     │   │   ├── turnstile_key.json
-    │   │   ├── turnstile_value.json *
+    │   │   ├── turnstile_value.json 
     │   │   ├── weather_key.json
-    │   │   └── weather_value.json *
-    │   ├── station.py *
+    │   │   └── weather_value.json 
+    │   ├── station.py 
     │   ├── train.py
-    │   ├── turnstile.py *
+    │   ├── turnstile.py 
     │   ├── turnstile_hardware.py
-    │   └── weather.py *
+    │   └── weather.py 
     ├── requirements.txt
     └── simulation.py
 ```
@@ -190,9 +186,8 @@ When configuring services that run within Docker Compose, like **Kafka Connect y
 
 ### Running the Simulation
 
-There are two pieces to the simulation, the `producer` and `consumer`. As you develop each piece of the code, it is recommended that you only run one piece of the project at a time.
-
-However, when you are ready to verify the end-to-end system prior to submission, it is critical that you open a terminal window for each piece and run them at the same time. **If you do not run both the producer and consumer at the same time you will not be able to successfully complete the project**.
+There are two pieces to the simulation, the `producer` and `consumer`. 
+It is critical that you open a terminal window for each piece and run them at the same time. **If you do not run both the producer and consumer at the same time you will not be successful**.
 
 #### To run the `producer`:
 
